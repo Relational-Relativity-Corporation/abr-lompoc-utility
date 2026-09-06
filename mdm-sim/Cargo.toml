@@ -1,0 +1,8 @@
+[package]
+name = "abr-lompoc-mdm-sim"
+version = "0.1.2"
+edition = "2021"
+
+[[bin]]
+name = "run_mdm_sim"
+path = "src/bin/run_mdm_sim.rs"
