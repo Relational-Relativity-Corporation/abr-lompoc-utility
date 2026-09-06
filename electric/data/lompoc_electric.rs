@@ -30,7 +30,8 @@ pub const CUSTOMERS_TOTAL:        u32 = 16_516;
 pub const RETAIL_SALES_MWH:       f64 = 130_286.0;
 pub const TOTAL_DISPOSITION_MWH:  f64 = 134_737.0;
 
-// Transmission loss implied by difference: disposition - retail = ~4,451 MWh
+// Disposition-retail gap: disposition - retail = ~4,451 MWh
+// Not confirmed as transmission or distribution loss — treated as speculative upper bound.
 pub const DISPOSITION_LESS_RETAIL_MWH: f64 = TOTAL_DISPOSITION_MWH - RETAIL_SALES_MWH;
 
 // Revenue — 2019 actuals

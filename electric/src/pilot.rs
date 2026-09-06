@@ -18,8 +18,9 @@ use crate::observables::{
     TOTAL_DISPOSITION_MWH, RATE_2026_USD_PER_KWH,
 };
 
-/// Annual savings range from ABR load optimization
-/// at industry benchmark 2–5% loss reduction
+/// Disposition gap scenario range — speculative.
+/// Declared scenario range 2–5% drawn from public-power loss benchmarks;
+/// not independently sourced as applicable to Lompoc specifically.
 #[derive(Debug)]
 pub struct AnnualSavingsRange {
     pub low_fraction:  f64,

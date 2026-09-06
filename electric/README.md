@@ -52,8 +52,9 @@ visible directly in public EIA data before any instrumentation is deployed.
 | 2%        | 2,695 MWh/yr | $781,475/yr (speculative) |
 | 5%        | 6,737 MWh/yr | $1,953,686/yr (speculative) |
 
-Industry benchmark: 2–5% of disposition potentially recoverable through active management.
-Scenario output only — actual Lompoc recovery requires pilot measurement and NCPA contract data.
+Declared speculative scenario range: 2–5% of disposition, drawn from public-power loss benchmarks.
+Not independently sourced as applicable to Lompoc specifically.
+Scenario output only — actual recovery requires pilot measurement and NCPA contract data.
 
 **PSPS revenue exposure:** $129,786/yr at risk (conservative — 48 hrs/yr
 shutoff assumed). ABR domain monitoring surfaces anomalies during and after
@@ -118,8 +119,6 @@ cargo run --release --bin run_electric
 ## Wholesale cost analysis — load shifting opportunity
 
 Lompoc buys 100% of its power wholesale through NCPA in the CAISO NP15 zone, at prices that vary significantly by hour. Lompoc sells to customers at a flat rate with no time-of-use structure (confirmed from published rate schedules, September 2026).
-
-This creates a hidden cost: Lompoc pays a **65% premium** for peak-hour power ($38/MWh) vs. off-peak ($23/MWh) but charges every customer the same $290/MWh regardless of when they consume.
 
 Under the declared wholesale-price scenario, shifting consumption from peak to off-peak periods reduces modeled energy procurement cost by the declared price spread. Actual Lompoc savings depend on NCPA contract and settlement terms (OC-WC-1).
 
