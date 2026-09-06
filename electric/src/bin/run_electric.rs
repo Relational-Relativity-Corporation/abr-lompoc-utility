@@ -9,18 +9,19 @@
 
 use abr_lompoc_electric::domain;
 use abr_lompoc_electric::observables::{
-    LoadProfile, LoadAnomaly, implied_distribution_loss_mwh,
-    implied_distribution_loss_pct, RETAIL_SALES_MWH, TOTAL_DISPOSITION_MWH,
+    LoadProfile, LoadAnomaly, disposition_retail_gap_mwh,
+    disposition_retail_gap_pct, RETAIL_SALES_MWH, TOTAL_DISPOSITION_MWH,
     RATE_2026_USD_PER_KWH, TOTAL_REVENUE_USD,
 };
 use abr_lompoc_electric::pilot::{AnnualSavingsRange, PspsExposure, PilotDeclaration};
+// Note: AnnualSavingsRange now uses DispositionGapScenario internally
 use abr_lompoc_electric::wholesale_cost::{
     WHOLESALE_PEAK_USD_PER_MWH, WHOLESALE_OFFPEAK_USD_PER_MWH,
     RETAIL_FLAT_RATE_USD_PER_MWH, PEAK_HOURS_PER_YEAR, OFFPEAK_HOURS_PER_YEAR,
     peak_mwh_annual, offpeak_mwh_annual,
     wholesale_peak_cost_annual, wholesale_offpeak_cost_annual,
     wholesale_total_cost_annual, gross_margin_annual,
-    LoadShiftScenario, Cur1Analysis,
+    LoadShiftScenario,
 };
 
 fn main() {
@@ -58,12 +59,14 @@ fn main() {
     println!("  Current residential rate:  ${:.4}/kWh (2026)", RATE_2026_USD_PER_KWH);
     println!();
 
-    // 4. Distribution loss
-    let loss_mwh = implied_distribution_loss_mwh();
-    let loss_pct = implied_distribution_loss_pct();
-    println!("--- IMPLIED DISTRIBUTION LOSS ---");
-    println!("  Disposition - Retail:      {:.0} MWh ({:.2}%)", loss_mwh, loss_pct);
+    // 4. Disposition-retail gap (renamed from distribution loss per Verifier finding)
+    let gap_mwh = disposition_retail_gap_mwh();
+    let gap_pct = disposition_retail_gap_pct();
+    println!("--- DISPOSITION-RETAIL GAP ---");
+    println!("  Disposition - Retail:      {:.0} MWh ({:.2}%)", gap_mwh, gap_pct);
     println!("  Source: total disposition minus retail sales (EIA Form 861 / public data)");
+    println!("  Note: gap is not confirmed as distribution loss — may include metering");
+    println!("  differences or accounting adjustments. Treated as speculative upper bound.");
     println!();
 
     // 5. Load profile
@@ -93,20 +96,22 @@ fn main() {
         anomaly_flagged.observed_mwh, anomaly_flagged.deviation_pct, anomaly_flagged.flagged);
     println!();
 
-    // 7. Loss reduction savings
+    // 7. Disposition gap scenario (speculative — renamed per Verifier finding)
     let range = AnnualSavingsRange::compute();
-    println!("--- ANNUAL SAVINGS ESTIMATE: LOSS REDUCTION ---");
-    println!("  Industry benchmark: 2–5% distribution loss reduction");
+    println!("--- DISPOSITION GAP SCENARIO (SPECULATIVE) ---");
+    println!("  Industry benchmark: 2-5% of disposition recoverable through active management.");
     println!("  Applied to total disposition: {:.0} MWh", TOTAL_DISPOSITION_MWH);
     println!("  Rate: ${:.4}/kWh (2026 Lompoc residential rate, EnergySage March 2026)", RATE_2026_USD_PER_KWH);
+    println!("  SCENARIO OUTPUT — actual Lompoc recovery requires pilot measurement.");
+    println!("  Actual NCPA contract terms and Lompoc-specific losses not yet observable.");
     println!();
-    println!("  At 2% reduction:");
-    println!("    MWh recovered:             {:.0} MWh/yr", range.low_savings.mwh_recovered);
-    println!("    Dollars saved:             ${:.0}/yr", range.low_savings.dollars_saved);
+    println!("  At 2% benchmark:");
+    println!("    MWh scenario:              {:.0} MWh/yr", range.low_savings.mwh_recovered);
+    println!("    Scenario benefit:          ${:.0}/yr (speculative)", range.low_savings.dollars_saved);
     println!();
-    println!("  At 5% reduction:");
-    println!("    MWh recovered:             {:.0} MWh/yr", range.high_savings.mwh_recovered);
-    println!("    Dollars saved:             ${:.0}/yr", range.high_savings.dollars_saved);
+    println!("  At 5% benchmark:");
+    println!("    MWh scenario:              {:.0} MWh/yr", range.high_savings.mwh_recovered);
+    println!("    Scenario benefit:          ${:.0}/yr (speculative)", range.high_savings.dollars_saved);
     println!();
 
     // 8. PSPS revenue exposure
@@ -174,13 +179,11 @@ fn main() {
     println!("  No new rate structure needed — CUR-1 is live today.");
     println!("  OC-MDM-5 applies: industrial load underrepresented by account-count allocation.");
     println!();
-    let cur = Cur1Analysis::compute(0.50);
-    println!("  Industrial load (by account count — known underestimate):");
-    println!("    Annual MWh:        {:.0} MWh/yr", cur.industrial_mwh_annual);
-    println!("    Peak MWh:          {:.0} MWh/yr", cur.curtailable_peak_mwh / 0.50);
-    println!("  At 50% peak curtailment via CUR-1:");
-    println!("    MWh curtailed:     {:.0} MWh/yr", cur.curtailable_peak_mwh);
-    println!("    Wholesale saving:  ${:.0}/yr (scenario — OC-WC-1, OC-MDM-5)", cur.wholesale_saving);
+    println!("  Industrial load by account count is a known significant underestimate");
+    println!("  (OC-MDM-5 — account-count allocation understates actual industrial MWh).");
+    println!("  Dollar figure for CUR-1 NOT REPORTED until actual industrial-class");
+    println!("  consumption is available from Luther/AMI deployment.");
+    println!("  Structural opportunity: confirmed. Quantitative opportunity: OPEN.");
     println!();
     println!("--- WHAT VISIBILITY CHANGES ---");
     println!("  Without AMI: Lompoc cannot see which feeders are peaking or when.");

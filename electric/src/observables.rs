@@ -84,22 +84,23 @@ impl LoadAnomaly {
     }
 }
 
-/// Loss reduction savings: dollars saved per year from reducing
-/// distribution losses by a declared fraction.
-/// Applied to total disposition (includes losses, not just retail sales).
+/// Disposition gap scenario benefit: speculative scenario output.
+/// Applies an industry benchmark reduction fraction to the disposition-retail gap.
+/// NOT a demonstrated saving — actual Lompoc recovery requires pilot measurement.
+/// Renamed from DispositionGapScenario per Verifier finding.
 #[derive(Debug)]
-pub struct LossReductionSavings {
+pub struct DispositionGapScenario {
     pub reduction_fraction: f64,
     pub mwh_recovered:      f64,
     pub dollars_saved:      f64,
 }
 
-impl LossReductionSavings {
+impl DispositionGapScenario {
     pub fn compute(total_disposition_mwh: f64, reduction_fraction: f64, rate_usd_per_kwh: f64) -> Self {
         let mwh_recovered = total_disposition_mwh * reduction_fraction;
         let kwh_recovered = mwh_recovered * 1000.0;
         let dollars_saved = kwh_recovered * rate_usd_per_kwh;
-        LossReductionSavings {
+        DispositionGapScenario {
             reduction_fraction,
             mwh_recovered,
             dollars_saved,
@@ -107,14 +108,16 @@ impl LossReductionSavings {
     }
 }
 
-/// Distribution loss implied by public data:
-/// total disposition - retail sales = unaccounted / loss
-pub fn implied_distribution_loss_mwh() -> f64 {
+/// Disposition-retail gap: total disposition minus retail sales.
+/// This gap is not confirmed as distribution loss — it may include
+/// metering differences, estimation adjustments, or other accounting.
+/// Renamed from implied_distribution_loss_mwh per Verifier finding.
+pub fn disposition_retail_gap_mwh() -> f64 {
     TOTAL_DISPOSITION_MWH - RETAIL_SALES_MWH
 }
 
-pub fn implied_distribution_loss_pct() -> f64 {
-    implied_distribution_loss_mwh() / TOTAL_DISPOSITION_MWH * 100.0
+pub fn disposition_retail_gap_pct() -> f64 {
+    disposition_retail_gap_mwh() / TOTAL_DISPOSITION_MWH * 100.0
 }
 
 #[cfg(test)]
@@ -149,28 +152,28 @@ mod tests {
 
     #[test]
     fn loss_reduction_2pct_positive_savings() {
-        let savings = LossReductionSavings::compute(TOTAL_DISPOSITION_MWH, 0.02, RATE_2026_USD_PER_KWH);
+        let savings = DispositionGapScenario::compute(TOTAL_DISPOSITION_MWH, 0.02, RATE_2026_USD_PER_KWH);
         assert!(savings.dollars_saved > 0.0, "Savings should be positive");
         assert!(savings.mwh_recovered > 0.0, "MWh recovered should be positive");
     }
 
     #[test]
     fn loss_reduction_5pct_greater_than_2pct() {
-        let low  = LossReductionSavings::compute(TOTAL_DISPOSITION_MWH, 0.02, RATE_2026_USD_PER_KWH);
-        let high = LossReductionSavings::compute(TOTAL_DISPOSITION_MWH, 0.05, RATE_2026_USD_PER_KWH);
+        let low  = DispositionGapScenario::compute(TOTAL_DISPOSITION_MWH, 0.02, RATE_2026_USD_PER_KWH);
+        let high = DispositionGapScenario::compute(TOTAL_DISPOSITION_MWH, 0.05, RATE_2026_USD_PER_KWH);
         assert!(high.dollars_saved > low.dollars_saved,
             "5% reduction should yield greater savings than 2%");
     }
 
     #[test]
-    fn implied_loss_is_positive() {
-        assert!(implied_distribution_loss_mwh() > 0.0,
+    fn disposition_gap_is_positive() {
+        assert!(disposition_retail_gap_mwh() > 0.0,
             "Implied distribution loss should be positive");
     }
 
     #[test]
-    fn implied_loss_pct_under_10() {
-        let pct = implied_distribution_loss_pct();
+    fn disposition_gap_pct_under_10() {
+        let pct = disposition_retail_gap_pct();
         assert!(pct < 10.0,
             "Implied loss pct should be under 10%, got {:.2}%", pct);
     }

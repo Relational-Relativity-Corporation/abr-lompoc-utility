@@ -14,8 +14,8 @@
 // The repository itself is the proof of methodology.
 
 use crate::observables::{
-    LossReductionSavings, LoadProfile,
-    TOTAL_DISPOSITION_MWH, RATE_2026_USD_PER_KWH, RETAIL_SALES_MWH,
+    DispositionGapScenario,
+    TOTAL_DISPOSITION_MWH, RATE_2026_USD_PER_KWH,
 };
 
 /// Annual savings range from ABR load optimization
@@ -24,8 +24,8 @@ use crate::observables::{
 pub struct AnnualSavingsRange {
     pub low_fraction:  f64,
     pub high_fraction: f64,
-    pub low_savings:   LossReductionSavings,
-    pub high_savings:  LossReductionSavings,
+    pub low_savings:   DispositionGapScenario,
+    pub high_savings:  DispositionGapScenario,
 }
 
 impl AnnualSavingsRange {
@@ -33,8 +33,8 @@ impl AnnualSavingsRange {
         AnnualSavingsRange {
             low_fraction:  0.02,
             high_fraction: 0.05,
-            low_savings:   LossReductionSavings::compute(TOTAL_DISPOSITION_MWH, 0.02, RATE_2026_USD_PER_KWH),
-            high_savings:  LossReductionSavings::compute(TOTAL_DISPOSITION_MWH, 0.05, RATE_2026_USD_PER_KWH),
+            low_savings:   DispositionGapScenario::compute(TOTAL_DISPOSITION_MWH, 0.02, RATE_2026_USD_PER_KWH),
+            high_savings:  DispositionGapScenario::compute(TOTAL_DISPOSITION_MWH, 0.05, RATE_2026_USD_PER_KWH),
         }
     }
 }
@@ -111,27 +111,28 @@ impl PilotDeclaration {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::observables::{LoadProfile, RETAIL_SALES_MWH};
 
     #[test]
-    fn annual_savings_low_is_positive() {
+    fn annual_scenario_low_is_positive() {
         let range = AnnualSavingsRange::compute();
         assert!(range.low_savings.dollars_saved > 0.0);
     }
 
     #[test]
-    fn annual_savings_high_exceeds_low() {
+    fn annual_scenario_high_exceeds_low() {
         let range = AnnualSavingsRange::compute();
         assert!(range.high_savings.dollars_saved > range.low_savings.dollars_saved);
     }
 
     #[test]
-    fn annual_savings_low_in_expected_range() {
+    fn annual_scenario_low_in_expected_range() {
         let range = AnnualSavingsRange::compute();
         // 2% of 134,737 MWh at $0.29/kWh = ~$781K
         assert!(range.low_savings.dollars_saved > 500_000.0,
-            "Low savings should exceed $500K, got ${:.0}", range.low_savings.dollars_saved);
+            "Scenario low should exceed $500K, got ${:.0}", range.low_savings.dollars_saved);
         assert!(range.low_savings.dollars_saved < 2_000_000.0,
-            "Low savings should be under $2M, got ${:.0}", range.low_savings.dollars_saved);
+            "Scenario low should be under $2M, got ${:.0}", range.low_savings.dollars_saved);
     }
 
     #[test]

@@ -10,9 +10,10 @@
 // hour — peak hours cost 40-80% more than off-peak hours.
 //
 // The spread between what Lompoc pays at peak and what it charges customers
-// is the cost of having no load management. Every peak-hour kWh sold at
-// flat rate is sold at or below cost. Every off-peak kWh sold at flat rate
-// carries margin that subsidizes the peak loss.
+// is the incremental procurement-cost opportunity from load shifting.
+// Lompoc buys peak power at a 65% premium over off-peak but sells all power
+// at the same flat retail rate. Shifting load to off-peak hours reduces
+// wholesale purchase cost without changing retail revenue.
 //
 // This analysis quantifies that spread using publicly sourced CAISO data.
 // No AMI required. No SCADA required. The data is public.
@@ -30,14 +31,23 @@
 //   Value:  $38.00/MWh on-peak (annual average, conservative)
 //   Unit:   USD per MWh
 //   Maps to: D — declared wholesale peak purchase price
+//   Provenance: INDEPENDENTLY SOURCED
 //
 // O-W02: caiso_np15_offpeak_avg_usd_per_mwh
-//   Source: CAISO peak/off-peak spread — peak typically 40-80% above off-peak
-//           (CAISO Summer Market Performance Report 2024; EIA wholesale data).
-//           Off-peak declared at 60% of peak (midpoint of observed spread).
-//   Value:  $23.00/MWh off-peak (annual average, conservative)
+//   Source: CAISO Summer Market Performance Report, Aug 30 2024 —
+//           "average prices in July were $50/MWh and $43/MWh for the integrated
+//           forward and real-time markets, respectively, up from $26/MWh and
+//           $23/MWh in June." The June real-time average of $23/MWh is an
+//           all-hours figure for a low-demand month, serving as the off-peak
+//           anchor. This is a lower-bound estimate; actual annual average
+//           off-peak will vary. Conservative declared value: $23/MWh.
+//   Value:  $23.00/MWh off-peak (annual average, conservative lower bound)
 //   Unit:   USD per MWh
 //   Maps to: D — declared wholesale off-peak purchase price
+//   Provenance: INDEPENDENTLY SOURCED (June 2024 real-time average, CAISO)
+//   Note: The $23 value coincides with the 60%-of-peak construction used in
+//   V0.2.0. Both paths converge on the same number but O-W02 is now sourced
+//   independently. The convergence is noted, not relied upon.
 //
 // O-W03: peak_hours_per_day_weekday
 //   Source: CAISO market definition — peak = hours-ending 7-22 weekdays/Saturdays
