@@ -45,15 +45,15 @@ the entire distribution domain goes dark with no city recourse.
 **Implied distribution loss:** 4,451 MWh — 3.30% of total disposition —
 visible directly in public EIA data before any instrumentation is deployed.
 
-**Annual savings estimate — loss reduction:**
+**Disposition gap scenario (speculative):**
 
-| Reduction | MWh recovered | Dollars saved |
-|-----------|--------------|---------------|
-| 2%        | 2,695 MWh/yr | $781,475/yr   |
-| 5%        | 6,737 MWh/yr | $1,953,686/yr |
+| Benchmark | MWh scenario | Scenario benefit |
+|-----------|-------------|------------------|
+| 2%        | 2,695 MWh/yr | $781,475/yr (speculative) |
+| 5%        | 6,737 MWh/yr | $1,953,686/yr (speculative) |
 
-Industry benchmark: 2–5% distribution loss reduction from load optimization.
-Applied to Lompoc's declared total disposition at the 2026 residential rate.
+Industry benchmark: 2–5% of disposition potentially recoverable through active management.
+Scenario output only — actual Lompoc recovery requires pilot measurement and NCPA contract data.
 
 **PSPS revenue exposure:** $129,786/yr at risk (conservative — 48 hrs/yr
 shutoff assumed). ABR domain monitoring surfaces anomalies during and after
@@ -121,7 +121,7 @@ Lompoc buys 100% of its power wholesale through NCPA in the CAISO NP15 zone, at 
 
 This creates a hidden cost: Lompoc pays a **65% premium** for peak-hour power ($38/MWh) vs. off-peak ($23/MWh) but charges every customer the same $290/MWh regardless of when they consume.
 
-Shifting load from peak to off-peak hours reduces wholesale purchase cost with no change to retail revenue:
+Under the declared wholesale-price scenario, shifting consumption from peak to off-peak periods reduces modeled energy procurement cost by the declared price spread. Actual Lompoc savings depend on NCPA contract and settlement terms (OC-WC-1).
 
 | Load shifted | MWh/yr | Wholesale saving |
 |-------------|--------|-----------------|
@@ -131,7 +131,7 @@ Shifting load from peak to off-peak hours reduces wholesale purchase cost with n
 
 Lompoc already has **Schedule CUR-1** (Firm Curtailable Load) — an existing demand response mechanism for large customers willing to accept interruption during peak hours in exchange for a rate discount. No new rate action is required to activate this lever.
 
-**What AMI + Metatron MDM enables:** Without AMI, Lompoc cannot see which feeders are peaking or when. With the relational monitoring layer on live AMI data, peak demand is detected in real time on declared edges, CUR-1 dispatch can be targeted to actual peak feeders, and load shift savings become measurable rather than scenario outputs.
+**What AMI + Metatron MDM enables:** Without AMI, Lompoc cannot see which feeders are peaking or when. With the relational monitoring layer on live AMI data, peak demand is detected in real time on declared edges, CUR-1 dispatch can be targeted to actual peak feeders, and OC-WC-1 and OC-WC-2 close — replacing scenario outputs with measured quantities from Lompoc's own data.
 
 Run `cargo run --release --bin run_electric` for the full quantified analysis.
 

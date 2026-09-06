@@ -151,14 +151,14 @@ mod tests {
     }
 
     #[test]
-    fn loss_reduction_2pct_positive_savings() {
+    fn disposition_scenario_2pct_positive() {
         let savings = DispositionGapScenario::compute(TOTAL_DISPOSITION_MWH, 0.02, RATE_2026_USD_PER_KWH);
         assert!(savings.dollars_saved > 0.0, "Savings should be positive");
         assert!(savings.mwh_recovered > 0.0, "MWh recovered should be positive");
     }
 
     #[test]
-    fn loss_reduction_5pct_greater_than_2pct() {
+    fn disposition_scenario_5pct_greater_than_2pct() {
         let low  = DispositionGapScenario::compute(TOTAL_DISPOSITION_MWH, 0.02, RATE_2026_USD_PER_KWH);
         let high = DispositionGapScenario::compute(TOTAL_DISPOSITION_MWH, 0.05, RATE_2026_USD_PER_KWH);
         assert!(high.dollars_saved > low.dollars_saved,
@@ -168,7 +168,7 @@ mod tests {
     #[test]
     fn disposition_gap_is_positive() {
         assert!(disposition_retail_gap_mwh() > 0.0,
-            "Implied distribution loss should be positive");
+            "Disposition-retail gap should be positive");
     }
 
     #[test]
