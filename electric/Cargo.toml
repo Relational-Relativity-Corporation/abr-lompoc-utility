@@ -1,0 +1,8 @@
+[package]
+name = "abr-lompoc-electric"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "run_electric"
+path = "src/bin/run_electric.rs"
