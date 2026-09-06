@@ -7,7 +7,8 @@
 //
 // Two observable classes are declared here:
 //   1. Load anomaly — deviation from declared load profile at a distribution edge
-//   2. Loss reduction — savings from reducing distribution losses by a declared fraction
+//   2. Disposition gap scenario — speculative scenario computation applying a
+//      declared benchmark fraction to total disposition (not to the 4,451 MWh gap itself).
 
 // Source: EIA Form 861 / findenergy.com (2019)
 pub const RETAIL_SALES_MWH: f64 = 130_286.0;

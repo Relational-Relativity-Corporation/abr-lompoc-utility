@@ -11,9 +11,11 @@
 //
 // The spread between what Lompoc pays at peak and what it charges customers
 // is the incremental procurement-cost opportunity from load shifting.
-// Lompoc buys peak power at a 65% premium over off-peak but sells all power
-// at the same flat retail rate. Shifting load to off-peak hours reduces
-// wholesale purchase cost without changing retail revenue.
+// Under the declared wholesale-price scenario ($38 peak / $23 off-peak),
+// Lompoc pays more per MWh during peak hours than off-peak hours but charges
+// all customers the same flat retail rate regardless of hour.
+// Shifting load to off-peak hours reduces modeled procurement cost by the
+// declared price spread. Actual Lompoc savings depend on NCPA contract terms (OC-WC-1).
 //
 // This analysis quantifies that spread using publicly sourced CAISO data.
 // No AMI required. No SCADA required. The data is public.
@@ -113,7 +115,7 @@ pub const RETAIL_FLAT_RATE_USD_PER_MWH: f64 = 290.00; // $0.29/kWh
 pub const ANNUAL_RETAIL_MWH: f64 = 130_286.0;
 
 /// Declared peak/off-peak load split (OC-WC-2)
-/// Industry benchmark for residential-dominant utility profile
+/// Declared scenario split for residential-dominant utility profile (OC-WC-2)
 pub const PEAK_LOAD_FRACTION:    f64 = 0.60; // 60% of annual MWh consumed during peak hours
 pub const OFFPEAK_LOAD_FRACTION: f64 = 0.40; // 40% during off-peak hours
 

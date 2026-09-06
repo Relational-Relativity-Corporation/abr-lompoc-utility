@@ -59,13 +59,13 @@ fn main() {
     println!("  Current residential rate:  ${:.4}/kWh (2026)", RATE_2026_USD_PER_KWH);
     println!();
 
-    // 4. Disposition-retail gap (renamed from distribution loss per Verifier finding)
+    // 4. Disposition-retail gap
     let gap_mwh = disposition_retail_gap_mwh();
     let gap_pct = disposition_retail_gap_pct();
     println!("--- DISPOSITION-RETAIL GAP ---");
     println!("  Disposition - Retail:      {:.0} MWh ({:.2}%)", gap_mwh, gap_pct);
     println!("  Source: total disposition minus retail sales (EIA Form 861 / public data)");
-    println!("  Note: gap is not confirmed as distribution loss — may include metering");
+    println!("  Note: gap is not confirmed as loss — may include metering differences");
     println!("  differences or accounting adjustments. Treated as speculative upper bound.");
     println!();
 
@@ -99,7 +99,7 @@ fn main() {
     // 7. Disposition gap scenario (speculative — renamed per Verifier finding)
     let range = AnnualSavingsRange::compute();
     println!("--- DISPOSITION GAP SCENARIO (SPECULATIVE) ---");
-    println!("  Industry benchmark: 2-5% of disposition recoverable through active management.");
+    println!("  Declared scenario range: 2-5% of disposition (public-power benchmark, speculative).");
     println!("  Applied to total disposition: {:.0} MWh", TOTAL_DISPOSITION_MWH);
     println!("  Rate: ${:.4}/kWh (2026 Lompoc residential rate, EnergySage March 2026)", RATE_2026_USD_PER_KWH);
     println!("  SCENARIO OUTPUT — actual Lompoc recovery requires pilot measurement.");
@@ -192,7 +192,7 @@ fn main() {
     println!("    - CUR-1 dispatch can be targeted to actual peak feeders");
     println!("    - Load shift savings become measurable, not scenario outputs");
     println!("    - OC-WC-2 closes: actual peak/off-peak split observed per meter");
-    println!("  The relational layer converts the spread from a hidden cost");
+    println!("  The relational layer makes the declared price-spread relation observable");
     println!("  into a declared, observable, actionable quantity.");
     println!();
     println!("=================================================================");

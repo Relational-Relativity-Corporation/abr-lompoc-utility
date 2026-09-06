@@ -42,7 +42,7 @@ the entire distribution domain goes dark with no city recourse.
 - $23,686,000 total revenue
 - Current residential rate: $0.29/kWh (EnergySage, March 2026)
 
-**Implied distribution loss:** 4,451 MWh — 3.30% of total disposition —
+**Disposition-retail gap:** 4,451 MWh — 3.30% of total disposition —
 visible directly in public EIA data before any instrumentation is deployed.
 
 **Disposition gap scenario (speculative):**
